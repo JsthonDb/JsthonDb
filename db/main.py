@@ -1,6 +1,6 @@
 from pathlib import Path
 import uuid
-from errors import UnknownKeyError, IdWasNotFound, QueryIsNotCallable
+from errors import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable
 
 try:
     import ujson
@@ -38,25 +38,28 @@ class JsthonDb:
     def generate_id(self):
         return str(int(uuid.uuid4()))[:14]
 
-    def add(self, data):
+    def add(self, data, id=str(self.generate_id())):
         if not(isinstance(data, dict)):
             raise TypeError(f'data must be "dict" and not {type(data)}')
+        if not(isinstance(id, str)):
+          raise TypeError(f'id must be "str" not {type(id)}')
 
         db = self.load_file()
+        if id in db['data']:
+          raise
         keys = db['keys']
         if len(keys) == 0:
             db['keys'] = sorted(list(data.keys()))
         else:
             if sorted(keys) != sorted(data.keys()):
                 raise UnknownKeyError(f'Urecognized / missed key(s) {set(keys) ^ set(data.keys())}')
-        _id = str(self.generate_id())
         if not isinstance(db['data'], dict):
             raise TypeError('data in db must be "dict"')
-        db['data'][_id] = data
+        db['data'][id] = data
         self.save_file(db)
-        return _id
+        return id
 
-    def add_many(self, data):
+    def add_many(self, data, id=None):
         if not(isinstance(data, list)):
             raise TypeError(f'data must be "list" not {type(data)}')
         if not(all(isinstance(i, dict) for i in data)):
@@ -74,9 +77,15 @@ class JsthonDb:
                 raise UnknownKeyError(f'unrecognized / missed key(s) {set(keys) ^ set(d.keys())}')
         if not(isinstance(db['data'], dict)):
             raise TypeError(f'data key in the db must be "dict" not {type(data)}')
-        for d in data:
-            id = str(self.generate_id())
-            db['data'][id] = d
+        if id is None:
+          for d in data:
+              id = generate_id()
+              db['data'][id] = d
+              _return[id] = d
+        else:
+          i = 0
+          for d in data:
+            db['data'][id[i]] = d
             _return[id] = d
         self.save_file(db)
         return _return
@@ -100,15 +109,15 @@ class JsthonDb:
         else:
             raise TypeError(f'data key in db must be "dict"')
 
-    def take_by_query(self, query):
-        if not(callable(query)):
-            raise QueryIsNotCallable(f'query must be callable and not {type(query)}')
+    def take_with_function(self, function):
+        if not(callable(function)):
+            raise FunctionIsNotCallable(f'function must be callable and not {type(query)}')
         new_data = {}
         data = self.load_file()['data']
         if isinstance(data, dict):
             for id, values in data.items():
                 if isinstance(values, dict):
-                    if query(values):
+                    if FunctionIsNotCallable (values):
                         new_data[id] = values
         else:
             return TypeError(f'data key in db must be "dict" not {type(data)}')
@@ -130,9 +139,9 @@ class JsthonDb:
         self.save_file(data=data)
         return data['data'][id]
 
-    def update_by_query(self, query, new_data):
+    def update_with_function(self, fucntion, new_data):
         if not(callable(query)):
-            raise QueryIsNotCallable(f'query must be callable and not {type(query)}')
+            raise FunctionIsNotCallableIsNotCallable('function must be callable and not {type(query)}')
         if not(isinstance(new_data, dict)):
             raise TypeError(f'new data must be dict')
         updated_keys = []
@@ -146,7 +155,7 @@ class JsthonDb:
         if not(isinstance(db['data'], dict)):
             raise TypeError(f'data key in db must be type "dict" not {type(db["data"])}')
         for key, value in db['data'].items():
-            if query(value):
+            if functon(value):
                 db['data'][key] = {**db['data'][key], **new_data}
                 updated_keys.append(key)
         self.save_file(data=db)
@@ -162,9 +171,9 @@ class JsthonDb:
 
         self.save_file(data)
 
-    def delete_by_query(self, query):
-        if not callable(query):
-            raise QueryIsNotCallable(f'query must be callable and not {type(query)}')
+    def delete_by_function(self, function):
+        if not callable(function):
+            raise FunctionIsNotCallable(f'fucntion must be callable and not {type(function)}')
         data = self.load_file()
         if not isinstance(data['data'], dict):
             raise TypeError(f'data key in db must be type dict not {type(data["data"])}')

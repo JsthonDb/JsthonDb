@@ -6,7 +6,7 @@ class UnknownKeyError(Exception):
         return str(self.message)
 
 
-class QueryIsNotCallable(Exception):
+class FunctionIsNotCallable(Exception):
     def __init__(self, message):
         self.message = message
 
@@ -20,3 +20,6 @@ class IdWasNotFound(Exception):
 
     def __str__(self):
         return str(self.message)
+
+
+class 
