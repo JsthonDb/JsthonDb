@@ -1,7 +1,7 @@
 from pathlib import Path
 import uuid
 import csv
-from errors import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName
+from jsthon.errors import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName
 
 try:
     import ujson
@@ -264,15 +264,18 @@ class JsthonDb:
             reader = csv.reader(f)
             for row in reader:
                 a = row[0]
+                while ' ' in a:
+                    a = a.replace(' ', '')
                 while ';' in a:
                     a = a.replace(';', ' ')
                 ret.append(a.split())
+                print(ret)
         data = {'keys': ret[0], 'data': {}}
         for i in range(1, len(ret)):
             id = self.generate_id()
             data['data'][id] = {x: None for x in ret[0]}
-            for j in data['data'][id]:
-                data['data'][id][j] =
+            for j in range(len(ret[0])):
+                data['data'][id][ret[0][j]] = ret[i][j]
         self.save_file(data)
 
     def convert_to_csv(self):
