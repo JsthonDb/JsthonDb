@@ -1,7 +1,7 @@
 from pathlib import Path
 import uuid
 import csv
-from jsthon.errors import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName
+from jsthon.__errors__ import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName
 
 try:
     import ujson
@@ -65,6 +65,8 @@ class JsthonDb:
         return id
 
     def add_many(self, data, id=None):
+        if not(isinstance(id, tuple)) and not(isinstance(id, type(None))):
+            raise TypeError(f'id must be "list" not {type(id)}')
         if not(isinstance(data, list)):
             raise TypeError(f'data must be "list" not {type(data)}')
         if not(all(isinstance(i, dict) for i in data)):
@@ -89,13 +91,14 @@ class JsthonDb:
             for d in data:
                 if not (isinstance(id[i], str)):
                     raise TypeError(f'id must be "str" not {type(id)}')
-                elif id.count(id[i]):
+                elif id.count(id[i]) > 1:
                     raise WrongIdsListWasGiven('it seems similar ids were given in list')
-                elif id[i] in db['data']:
+                elif id[i] in db['data'].keys():
                     raise IdIsAlreadyUsed(
                         'id is already used in db (please change the id argument or leave it empty for automatic filling)')
                 db['data'][id[i]] = d
-                _return[id] = d
+                _return[id[i]] = d
+                i += 1
         self.save_file(db)
         return _return
 
@@ -126,7 +129,7 @@ class JsthonDb:
         if isinstance(data, dict):
             for id, values in data.items():
                 if isinstance(values, dict):
-                    if FunctionIsNotCallable(values):
+                    if function(values):
                         new_data[id] = values
         else:
             return TypeError(f'data key in db must be "dict" not {type(data)}')
@@ -176,24 +179,28 @@ class JsthonDb:
             raise TypeError(f'data key in db must be dict not {type(data["data"])}')
         if id not in data['data']:
             raise IdWasNotFound(f'{id} was not found')
+        ret = self.take_by_id(id)
         del data['data'][id]
         self.save_file(data)
+        return ret
 
-    def delete_by_function(self, function):
+    def delete_with_function(self, function):
+        ret = []
+        ids_to_delete = []
         if not callable(function):
             raise FunctionIsNotCallable(f'fucntion must be callable and not {type(function)}')
         data = self.load_file()
         if not isinstance(data['data'], dict):
             raise TypeError(f'data key in db must be type dict not {type(data["data"])}')
-        ids_to_delete = []
         for id, value in data['data'].items():
             if function(value):
                 ids_to_delete.append(id)
         for id in ids_to_delete:
+            ret.append(self.take_by_id(id))
             del data['data'][id]
 
         self.save_file(data)
-        return ids_to_delete
+        return ret
 
     def add_new_key(self, key, value=None):
         if not isinstance(key, str):
@@ -264,12 +271,8 @@ class JsthonDb:
             reader = csv.reader(f)
             for row in reader:
                 a = row[0]
-                while ' ' in a:
-                    a = a.replace(' ', '')
-                while ';' in a:
-                    a = a.replace(';', ' ')
-                ret.append(a.split())
-                print(ret)
+                ret.append(a.split(';'))
+        print(ret)
         data = {'keys': ret[0], 'data': {}}
         for i in range(1, len(ret)):
             id = self.generate_id()
