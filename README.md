@@ -3,7 +3,8 @@
 ## Contests
 0. [Example json file](#example-json-file)
 1. [How to download](#how-to-download)
-2. [All methods usage examples](#all-methods-usage-examples)
+2. [Dependecies](#dependencies)
+3. [All methods usage examples](#all-methods-usage-examples)
     + [Creating empty JsthonDb](#creating-empty-jsthondb)
     + [add](#add)
     + [add_many](#add_many)
@@ -25,6 +26,10 @@
 ```cli
 git clone https://github.com/terribleMOTHMAN/jsthon
 ```
+
+## Dependencies
++ `uuid` >= 1.30
++ `ujson` >= 5.6.0
 
 ## Example json file
 ```json
