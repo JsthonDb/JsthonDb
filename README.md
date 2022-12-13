@@ -1,4 +1,4 @@
-# jsthon
+# JsthonDb
 
 ## Contests
 0. [Example json file](#example-json-file)
@@ -24,7 +24,7 @@
 
 ## How to download
 ```cli
-git clone https://github.com/terribleMOTHMAN/jsthon
+git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```
 
 ## Dependencies
