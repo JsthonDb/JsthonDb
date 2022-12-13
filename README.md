@@ -2,7 +2,8 @@
 
 ## Contests
 0. [Example json file](#example-json-file)
-1. [All methods usage examples](#all-methods-usage-examples)
+1. [How to download](#how-to-download)
+2. [All methods usage examples](#all-methods-usage-examples)
     + [Creating empty JsthonDb](#creating-empty-jsthondb)
     + [add](#add)
     + [add_many](#add_many)
@@ -19,6 +20,11 @@
     + [clear](#clear)
     + [convert_to_csv](#convert_to_csv)
     + [open_csv](#open_csv)
+
+## How to download
+```cli
+git clone https://github.com/terribleMOTHMAN/jsthon
+```
 
 ## Example json file
 ```json
