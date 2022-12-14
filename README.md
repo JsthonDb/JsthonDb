@@ -273,6 +273,7 @@ Output
 
 ### open_csv
 Before opening csv file method clear was used
+
 Example usage
 ```python
 db.open_csv('tvshows.csv')
