@@ -1,9 +1,9 @@
 # JsthonDb
 
 ## Contests
-0. [Example json file](#example-json-file)
-1. [How to download](#how-to-download)
-2. [Dependecies](#dependencies)
+0. [How to download](#how-to-download)
+1. [Dependecies](#dependencies)
+2. [Example json file](#example-json-file) 
 3. [All methods usage examples](#all-methods-usage-examples)
     + [Creating empty JsthonDb](#creating-empty-jsthondb)
     + [add](#add)
