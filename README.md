@@ -2,7 +2,7 @@
 
 ## Contests
 0. [How to download](#how-to-download)
-1. [Dependecies](#dependencies)
+1. [Requirements](#requirements) 
 2. [Example json file](#example-json-file) 
 3. [All methods usage examples](#all-methods-usage-examples)
     + [Creating empty JsthonDb](#creating-empty-jsthondb)
@@ -27,7 +27,7 @@
 git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```
 
-## Dependencies
+## Requirements 
 + `uuid` >= 1.30
 + `ujson` >= 5.6.0
 
