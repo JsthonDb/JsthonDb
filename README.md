@@ -100,7 +100,7 @@ Output
 1
 ```
 ### add_many
-Example usage (data field  must be list with with elements that are dictionaries)
+Example usage (data field  must be list with elements that are dictionaries)
 ```python
 added_values = db.add_many([{'name': 'Shameless', 'start': 2011}, {'name': 'The Boys', 'start': 2019}])
 print(added_values)
