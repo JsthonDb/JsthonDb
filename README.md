@@ -64,7 +64,7 @@ git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```
 
 ## All methods usage examples
-### Creating empty JsthonDb
+### Creating empty table of JsthonDb named 'tvshows.json'
 ```python
 from jsthon import JsthonDb
 
