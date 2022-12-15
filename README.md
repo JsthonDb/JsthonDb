@@ -21,6 +21,7 @@
     + [clear](#clear)
     + [convert_to_csv](#convert_to_csv)
     + [open_csv](#open_csv)
+4. [Leave your feedback](#leave-your-feedback)
 
 ## How to download
 ```cli
@@ -306,3 +307,7 @@ Output
   }
 }
 ```
+## Leave your feedback
+I need your review! It will be pleasure for me ^_^
+
+[Survey](https://ru.surveymonkey.com/r/LDR7NHY)
