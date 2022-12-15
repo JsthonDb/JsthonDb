@@ -272,7 +272,6 @@ class JsthonDb:
             for row in reader:
                 a = row[0]
                 ret.append(a.split(';'))
-        print(ret)
         data = {'keys': ret[0], 'data': {}}
         for i in range(1, len(ret)):
             id = self.generate_id()
