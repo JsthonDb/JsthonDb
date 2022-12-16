@@ -1,6 +1,5 @@
 from pathlib import Path
 import uuid
-import csv
 from jsthon.__errors__ import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName, NotUniqueNameOfTable
 
 try:
