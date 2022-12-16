@@ -5,7 +5,7 @@
 1. [Requirements](#requirements) 
 2. [Example json file](#example-json-file) 
 3. [All methods usage examples](#all-methods-usage-examples)
-    + [Creating empty JsthonDb named main.json](#creating-empty-jsthondb-named-main)
+    + [Creating empty JsthonDb](#creating-empty-jsthondb)
     + [create_table](#create_table)
     + [choose_table](#choose_table)
     + [add](#add)
@@ -58,11 +58,11 @@ git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```
 
 ## All methods usage examples
-### Creating empty JsthonDb named main
+### Creating empty JsthonDb
 ```python
 from jsthon import JsthonDb
 
-db = JsthonDb('tvshows.json')
+db = JsthonDb('main.json')
 ```
 We created that empty file
 ```json
