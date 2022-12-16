@@ -5,7 +5,9 @@
 1. [Requirements](#requirements) 
 2. [Example json file](#example-json-file) 
 3. [All methods usage examples](#all-methods-usage-examples)
-    + [Creating empty JsthonDb](#creating-empty-jsthondb)
+    + [Creating empty JsthonDb named main.json](#creating-empty-jsthondb-named-main)
+    + [create_table](#create_table)
+    + [choose_table](#choose_table)
     + [add](#add)
     + [add_many](#add_many)
     + [take_all](#take_all)
@@ -17,10 +19,9 @@
     + [delete_with_function](#delete_with_function)
     + [add_new_key](#add_new_key)
     + [add_new_keys](#add_new_keys)
-    + [show](#show)
-    + [clear](#clear)
-    + [convert_to_csv](#convert_to_csv)
-    + [open_csv](#open_csv)
+    + [show_table](#show_table)
+    + [clear_table](#clear_table)
+    + [clear_db](#clear_db)
 4. [Leave your feedback](#leave-your-feedback)
 
 ## How to download
@@ -36,27 +37,20 @@ git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```json
 
 {
-  "keys": [
-    "name",
-    "start",
-    "broadcast",
-    "ratings",
-    "language"
-  ],
-  "data": {
-    "111427139670082062530275901337557814850": {
-      "name": "Shameless",
-      "start": "2011",
-      "broadcast": "True",
-      "ratings": "good",
-      "language": "english"
-    },
-    "256970725050456543664090450342998289596": {
-      "name": "The Boys",
-      "start": "2019",
-      "broadcast": "True",
-      "ratings": "good",
-      "language": "english"
+  "tvshows": {
+    "keys": [
+
+    ],
+    "data": {
+
+    }
+  },
+  "films": {
+    "keys": [
+
+    ],
+    "data": {
+
     }
   }
 }
@@ -64,7 +58,7 @@ git clone https://github.com/terribleMOTHMAN/JsthonDb
 ```
 
 ## All methods usage examples
-### Creating empty table of JsthonDb named 'tvshows.json'
+### Creating empty JsthonDb named main
 ```python
 from jsthon import JsthonDb
 
@@ -73,14 +67,42 @@ db = JsthonDb('tvshows.json')
 We created that empty file
 ```json
 {
-  "keys": [
 
-  ],
-  "data": {
+}
+```
+### create_table
+Example usage (name field must be str)
+```python
+db.create_table('tvshows')
+db.create_table('films')
+```
+```json
+{
+  "tvshows": {
+    "keys": [
 
+    ],
+    "data": {
+
+    }
+  },
+  "films": {
+    "keys": [
+
+    ],
+    "data": {
+
+    }
   }
 }
 ```
+You need to know that after using this method table that will be changed by the default methods will be films. Because it was created last
+### choose_table
+Example usage (table field must be str)
+```python
+db.choose_table('tvshows')
+```
+All the methods we will use will change the table 'tvshows' because we have chosen it
 ### add
 Example usage (data field must be dict)
 ```python
@@ -233,10 +255,10 @@ Output
 {'1': {'name': 'Better Call Saul', 'start': 2015, 'broadcast': True, 'ratings': 'good', 'language': 'english'}, '334561175396969661937858438600623257934': {'name': 'The Boys', 'start': 2019, 'broadcast': True, 'ratings': 'good', 'language': 'english'}}
 ```
 
-### show
+### show_table
 Example usage
 ```python
-a = db.show()
+a = db.show_table()
 print(a)
 ```
 Output
@@ -244,69 +266,45 @@ Output
 [['name', 'start', 'broadcast', 'ratings', 'language'], ['Better Call Saul', 2015, True, 'good', 'english'], ['The Boys', 2019, True, 'good', 'english']]
 ```
 
-### clear
+### clear_table
 Example usage
 ```python
-db.clear()
+db.clear_table()
 ```
 Json file
 ```json
 {
-  "keys": [
+  "tvshows": {
+    "keys": [
 
-  ],
-  "data": {
+    ],
+    "data": {
 
-  }
-}
-```
+    }
+  },
+  "films": {
+    "keys": [
 
-### convert_to_csv
-Example usage
-```python
-print(db.convert_to_csv())
-```
-Output
-```python
-[['name', 'start', 'broadcast', 'ratings', 'language'], ['Better Call Saul', 2015, True, 'good', 'english'], ['The Boys', 2019, True, 'good', 'english']]
-```
-![image](https://user-images.githubusercontent.com/65505901/207400635-d40ac1de-4319-4266-b72e-47c6437610de.png)
+    ],
+    "data": {
 
-### open_csv
-Before opening csv file method clear was used
-
-Example usage
-```python
-db.open_csv('tvshows.csv')
-```
-Output
-```json
-{
-  "keys": [
-    "name",
-    "start",
-    "broadcast",
-    "ratings",
-    "language"
-  ],
-  "data": {
-    "142577528007816699812409659394714608584": {
-      "name": "Better Call Saul",
-      "start": "2015",
-      "broadcast": "True",
-      "ratings": "good",
-      "language": "english"
-    },
-    "187051371904602478372091759624266292597": {
-      "name": "The Boys",
-      "start": "2019",
-      "broadcast": "True",
-      "ratings": "good",
-      "language": "english"
     }
   }
 }
 ```
+
+### clear_db
+Example usage
+```python
+db.clear_db()
+```
+Json file
+```json
+{
+
+}
+```
+
 ## Leave your feedback
 I need your review! It will be pleasure for me ^_^
 
