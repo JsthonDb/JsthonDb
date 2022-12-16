@@ -22,7 +22,15 @@
     + [show_table](#show_table)
     + [clear_table](#clear_table)
     + [clear_db](#clear_db)
-4. [Leave your feedback](#leave-your-feedback)
+4. [Errors](#errors)
+    + [UnknownKeyError](#unknownkeyerror)
+    + [FunctionIsNotCallable](#functionisnotcallable)
+    + [WrongIdsListWasGiven](#wrongidslistwasgiven)
+    + [IdWasNotFound](#idwasnotfound)
+    + [IdIsAlreadyUsed](#idisalreadyused)
+    + [NotUniqueNameOfTable](#notuniquenameoftable)
+    + [WrongFileName](#wrongfilename)
+5. [Leave your feedback](#leave-your-feedback)
 
 ## How to download
 ```cli
@@ -305,6 +313,27 @@ Json file
 
 }
 ```
+## Errors
+### UnknownKeyError
+It's raised when key was unrecognised or missed
+
+### FunctionIsNotCallable
+It's raised when function was given to the method is not callable or is not function
+
+### WrongIdsListWasGiven
+It's raised when idswas  given to the method have wrong type
+
+### IdWasNotFound
+It's raised when id was not found in the table
+
+### IdIsAlreadyUsed
+It's raised when id was given to the methon is not unique in the table
+
+### NotUniqueNameOfTable
+It's raised when name of table that was given is not unique
+
+### WrongFileName
+It's raised when wrong filename was given to a class
 
 ## Leave your feedback
 I need your review! It will be pleasure for me ^_^
