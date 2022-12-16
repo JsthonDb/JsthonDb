@@ -1,8 +1,11 @@
 from jsthon import JsthonDb
 
-db = JsthonDb('tvshows.json')
+db = JsthonDb('main.json')
 
-print(db.take_all())
+db.create_table('tvshows')
+db.create_table('films')
+
+db.choose_table('tvshows')
 
 id = db.add({'name': 'Breaking Bad', 'start': 2008})
 print(id)
@@ -38,7 +41,7 @@ def func2(data):
 updated_data = db.update_with_function(func2, {'name': '$hameless'})
 print(updated_data)
 
-deleted_data = db.delete_by_id("227987855254015167042504673548582084559")
+deleted_data = db.delete_by_id("2")
 print(deleted_data)
 
 def func3(data):
@@ -55,12 +58,8 @@ print(db.take_all())
 db.add_new_keys(['ratings', 'language'], ['good', 'english'])
 print(db.take_all())
 
-a = db.show()
+a = db.show_table()
 print(a)
 
-
-print(db.convert_to_csv())
-
-db.clear()
-
-db.open_csv('tvshows.csv')
+# db.clear_table()
+db.clear_db()
