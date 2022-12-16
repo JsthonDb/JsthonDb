@@ -12,6 +12,8 @@ except:
 
 class JsthonDb:
     def __init__(self, filename):
+        if not(isinstance(filename, str)):
+            raise WrongFileName(f'filename must be "str" not {type(filename)}')
         if filename[-5:] != '.json':
             raise WrongFileName('filename must end with .json')
         self.filename = filename
@@ -45,12 +47,15 @@ class JsthonDb:
         if not(isinstance(name, str)):
             raise TypeError(f'name must be "str" not {type(name)}')
         if name in db.keys():
-            raise NotUniqueNameOfTable('the table name is already represented in the database')
+            raise NotUniqueNameOfTable(f'{name} is already represented in the db')
         db[name] = {'keys': [], 'data': {}}
         self.save_file(db)
         self.table = name
 
     def choose_table(self, table):
+        db = self.load_file()
+        if not(table in db.keys()):
+            raise UnknownKeyError(f'{table} is not name of any table in db')
         self.table = table
 
     def add(self, data, id=None):
