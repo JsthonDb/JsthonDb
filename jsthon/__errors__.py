@@ -38,6 +38,14 @@ class IdIsAlreadyUsed(Exception):
         return str(self.message)
 
 
+class NotUniqueNameOfTable(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return str(self.message)
+
+
 class WrongFileName(Exception):
     def __init__(self, message):
         self.message = message
