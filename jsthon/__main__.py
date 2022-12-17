@@ -1,5 +1,6 @@
 from pathlib import Path
 import uuid
+from filelock import FileLock
 from jsthon.__errors__ import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, WrongIdsListWasGiven, WrongFileName, NotUniqueNameOfTable
 
 try:
@@ -17,8 +18,8 @@ class JsthonDb:
         if filename[-5:] != '.json':
             raise WrongFileName('filename must end with .json')
         self.filename = filename
-        self.generate_db_file()
         self.table = None
+        self.generate_db_file()
 
     def load_file(self):
         with open(self.filename, encoding='utf-8', mode='r') as f:
@@ -33,7 +34,6 @@ class JsthonDb:
                 ujson.dump(data, f)
             else:
                 json.dump(data, f)
-        return None
 
     def generate_db_file(self):
         if not Path(self.filename).is_file():
@@ -74,7 +74,7 @@ class JsthonDb:
             db[self.table]['keys'] = list(data.keys())
         else:
             if sorted(keys) != sorted(data.keys()):
-                raise UnknownKeyError(f'Urecognized / missed key(s) {set(keys) ^ set(data.keys())}')
+                raise UnknownKeyError(f'unrecognized / missed key(s) {set(keys) ^ set(data.keys())}')
         if not isinstance(db[self.table]['data'], dict):
             raise TypeError('data in db must be "dict"')
         db[self.table]['data'][id] = data
@@ -205,7 +205,7 @@ class JsthonDb:
         ret = []
         ids_to_delete = []
         if not callable(function):
-            raise FunctionIsNotCallable(f'fucntion must be callable and not {type(function)}')
+            raise FunctionIsNotCallable(f'function must be callable and not {type(function)}')
         data = self.load_file()
         if not isinstance(data[self.table]['data'], dict):
             raise TypeError(f'data key in db must be type dict not {type(data[self.table]["data"])}')
