@@ -43,7 +43,6 @@ python setup.py install
 ## Requirements 
 + `uuid` >= 1.30
 + `ujson` >= 5.6.0
-+ `filelock` >=3.8.2
 
 ## Example json file
 ```json
