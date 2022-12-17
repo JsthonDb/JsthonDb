@@ -36,7 +36,7 @@
 ## How to download
 ```cli
 git clone https://github.com/terribleMOTHMAN/JsthonDb
-cd jsthondb
+cd JsthonDb
 python setup.py install
 ```
 
