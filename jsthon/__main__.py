@@ -38,6 +38,7 @@ class JsthonDb:
         if not Path(self.filename).is_file():
             self.save_file({})
 
+    @staticmethod
     def generate_id(self):
         return str(int(uuid.uuid4()))
 
