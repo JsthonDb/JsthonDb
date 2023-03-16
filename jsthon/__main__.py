@@ -347,6 +347,7 @@ class JsthonDb:
         if not isinstance(password, str):
             raise TypeError(f'password must be "str" not {type(password)}')
         self.keys = encryption.getKeys(password)
+        return self.keys
 
     def decrypt(self, data):
         if not isinstance(data, str):
