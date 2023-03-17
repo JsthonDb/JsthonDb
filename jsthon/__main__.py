@@ -1,7 +1,8 @@
 from pathlib import Path
 import uuid
 from jsthon.__errors__ import UnknownKeyError, IdWasNotFound, FunctionIsNotCallable, IdIsAlreadyUsed, \
-    WrongIdsListWasGiven, WrongFileName, NotUniqueNameOfTable, WrongTypeOfEncryptedData, KeysWereNotGenerated
+    WrongIdsListWasGiven, WrongFileName, NotUniqueNameOfTable, WrongTypeOfEncryptedData, KeysWereNotGenerated, \
+    UnknownEncryptionError
 from jsthon.kuznechik import __main__ as encryption
 
 try:
@@ -87,10 +88,13 @@ class JsthonDb:
             self.save_file(db)
         else:
             if self.keys is not None:
-                for key in data.keys():
-                    data[key] = encryption.encrypt(str(data[key]), self.keys)
-                db[self.table]['data'][id] = data
-                self.save_file(db)
+                try:
+                    for key in data.keys():
+                        data[key] = encryption.encrypt(str(data[key]), self.keys)
+                    db[self.table]['data'][id] = data
+                    self.save_file(db)
+                except:
+                    raise UnknownEncryptionError('something went wrong while encrypting')
             else:
                 raise KeysWereNotGenerated(f'to begin with, you should use the set_encryption_keys method, and only then add values')
         return id
@@ -120,12 +124,15 @@ class JsthonDb:
                     _return[id] = d
             else:
                 if self.keys is not None:
-                    for d in data:
-                        id = self.generate_id()
-                        for key in d.keys():
-                            d[key] = encryption.encrypt(str(d[key]), self.keys)
-                        db[self.table]['data'][id] = d
-                        _return[id] = d
+                    try:
+                        for d in data:
+                            id = self.generate_id()
+                            for key in d.keys():
+                                d[key] = encryption.encrypt(str(d[key]), self.keys)
+                            db[self.table]['data'][id] = d
+                            _return[id] = d
+                    except:
+                        raise UnknownEncryptionError('something went wrong while encrypting')
                 else:
                     raise KeysWereNotGenerated(
                         f'to begin with, you should use the set_encryption_keys method, and only then add values')
@@ -153,8 +160,11 @@ class JsthonDb:
                         elif id[i] in db[self.table]['data'].keys():
                             raise IdIsAlreadyUsed(
                                 'id is already used in db (please change the id argument or leave it empty for automatic filling)')
-                        for key in d.keys():
-                            d[key] = encryption.encrypt(str(d[key]), self.keys)
+                        try:
+                            for key in d.keys():
+                                d[key] = encryption.encrypt(str(d[key]), self.keys)
+                        except:
+                            raise UnknownEncryptionError('something went wrong while encrypting')
                         db[self.table]['data'][id[i]] = d
                         _return[id[i]] = d
                         i += 1
@@ -211,8 +221,11 @@ class JsthonDb:
             raise IdWasNotFound(f'{id} was not found')
         if self.crypt:
             if self.keys is not None:
-                for key in new_data.keys():
-                    new_data[key] = encryption.encrypt(str(new_data[key]), self.keys)
+                try:
+                    for key in new_data.keys():
+                        new_data[key] = encryption.encrypt(str(new_data[key]), self.keys)
+                except:
+                    raise UnknownEncryptionError('something went wrong while encrypting')
             else:
                 raise KeysWereNotGenerated(
                     f'to begin with, you should use the set_encryption_keys method, and only then add values')
@@ -237,8 +250,11 @@ class JsthonDb:
             raise TypeError(f'data key in db must be type "dict" not {type(db[self.table]["data"])}')
         if self.crypt:
             if self.keys is not None:
-                for key in new_data.keys():
-                    new_data[key] = encryption.encrypt(str(new_data[key]), self.keys)
+                try:
+                    for key in new_data.keys():
+                        new_data[key] = encryption.encrypt(str(new_data[key]), self.keys)
+                except:
+                    raise UnknownEncryptionError('something went wrong while encrypting')
             else:
                 raise KeysWereNotGenerated(
                     f'to begin with, you should use the set_encryption_keys method, and only then add values')
@@ -348,6 +364,24 @@ class JsthonDb:
             raise TypeError(f'password must be "str" not {type(password)}')
         self.keys = encryption.getKeys(password)
         return self.keys
+
+    def encrypt_by_key(self, key):
+        if not isinstance(key, str):
+            raise TypeError(f'key field must bе string not {type(key)}')
+        db = self.load_file()
+        if self.keys is not None:
+            if isinstance(db[self.table]['data'], dict):
+                try:
+                    for d in db[self.table]['data'].values():
+                        d[key] = encryption.encrypt(str(d[key]), self.keys)
+                except:
+                    raise UnknownEncryptionError('something went wrong while encrypting')
+            else:
+                raise TypeError(f'data key in db must be "dict" not {type(db[self.table]["data"])}')
+        else:
+            raise KeysWereNotGenerated(
+                f'to begin with, you should use the set_encryption_keys method, and only then add values')
+        self.save_file(db)
 
     def decrypt(self, data):
         if not isinstance(data, str):
