@@ -5,7 +5,7 @@
 0. [How to download](#how-to-download)
 1. [Requirements](#requirements) 
 2. [Example json file](#example-json-file) 
-3. [All vanila methods usage examples](#all-vanila-methods-usage-examples)
+3. [All methods usage examples](#all-methods-usage-examples)
     + [Creating empty JsthonDb](#creating-empty-jsthondb)
     + [create_table](#create_table)
     + [choose_table](#choose_table)
@@ -23,10 +23,7 @@
     + [show_table](#show_table)
     + [clear_table](#clear_table)
     + [clear_db](#clear_db)
-4. [Encryption of incoming data](#encryption-of-incoming-data)
-    + [A little bit about the encryption method](#a-little-bit-about-the-encryption-method)
-    + [How to use](#how-to-use)
-6. [Errors](#errors)
+4. [Errors](#errors)
     + [UnknownKeyError](#unknownkeyerror)
     + [FunctionIsNotCallable](#functionisnotcallable)
     + [WrongIdsListWasGiven](#wrongidslistwasgiven)
@@ -34,7 +31,7 @@
     + [IdIsAlreadyUsed](#idisalreadyused)
     + [NotUniqueNameOfTable](#notuniquenameoftable)
     + [WrongFileName](#wrongfilename)
-7. [Leave your feedback](#leave-your-feedback)
+5. [Leave your feedback](#leave-your-feedback)
 
 ## How to download
 ```cli
@@ -71,7 +68,7 @@ python setup.py install
 
 ```
 
-## All vanila methods usage examples
+## All methods usage examples
 ### Creating empty JsthonDb
 ```python
 from jsthon import JsthonDb
@@ -133,7 +130,7 @@ id = db.add({'name': 'Mr. Robot', 'start': 2015}, "1")
 print(id)
 ```
 Output
-```python
+```
 1
 ```
 ### add_many
@@ -318,62 +315,6 @@ Json file
 
 }
 ```
-## Encryption of incoming data
-### A little bit about the encryption method
-The Russian algorithm "Kuznechik" (in English "Grasshopper") is used for data encryption 
-"Kuznechik" is a symmetric block cipher algorithm with a block size of 128 bits and a key length of 256 bits that uses an SP-net to generate round-robin keys.
-
-### How to use
-Of course at first create db
-Then do next steps:
-1) via method set_encryption() set True or False (if True all data that will be added to the db will be encrypted)
-2) via method set_encryption_keys() set our password for encryption
-Then we create password and via
-```python
-db = JsthonDb('main.json')
-
-password = 'themostcommonpassword'
-db.set_encryption(True)
-keys = db.set_encryption_keys(password)
-print(keys)
-```
-Output
-```python
-[list of keys]
-```
-Then we can use it like that
-```python
-db.add({'name': 'Breaking Bad', 'start': 2008})
-db.set_encryption(False)
-db.add({'name': 'Mr. Robot', 'start': 2015}, "1")
-db.set_encryption(True)
-
-db.add_many([{'name': 'Shameless', 'start': 2011}, {'name': 'The Boys', 'start': 2019}])
-db.set_encryption(False)
-db.add_many([{'name': 'Scrubs', 'start': 2001}, {'name': 'How I Met Your Mother', 'start': 2005}], ("0", "2"))
-db.set_encryption(True)
-
-db.update_by_id("0", {"name": "Truckers"})
-
-
-def func(data):
-    if data['name'] == 'How I Met Your Mother':
-        return True
-
-
-db.update_with_function(func, {"name": "Supernatural"})
-```
-Or you can use encrypt_by_key() to encrypt selected columns(keys)
-```python
-db.encrypt_by_key('name')
-```
-
-Also, you can decrypt data via method decrypt
-```python
-data = 'some information'
-decrypted_data = db.decrypt(data)
-```
-
 ## Errors
 ### UnknownKeyError
 It's raised when key was unrecognised or missed

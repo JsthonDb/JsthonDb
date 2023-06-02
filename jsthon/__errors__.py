@@ -52,18 +52,3 @@ class WrongFileName(Exception):
 
     def __str__(self):
         return str(self.message)
-
-
-class WrongTypeOfEncryptedData(Exception):
-    def __init__(self, message):
-        self.message = message
-
-    def __str__(self):
-        return str(self.message)
-
-class KeysWereNotGenerated(Exception):
-    def __init__(self, message):
-        self.message = message
-
-    def __str__(self):
-        return str(self.message)
