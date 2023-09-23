@@ -38,10 +38,6 @@ class JsthonDb:
         if not Path(self.filename).is_file():
             self.save_file({})
 
-    @staticmethod
-    def generate_id(self):
-        return str(int(uuid.uuid4()))
-
     def create_table(self, name):
         db = self.load_file()
         if not(isinstance(name, str)):
@@ -53,10 +49,13 @@ class JsthonDb:
         self.table = name
 
     def choose_table(self, table):
-        db = self.load_file()
-        if not(table in db.keys()):
-            raise UnknownKeyError(f'{table} is not name of any table in db')
-        self.table = table
+        if table is None:
+            self.table = table
+        else:
+            db = self.load_file()
+            if not(table in db.keys()):
+                raise UnknownKeyError(f'{table} is not name of any table in db')
+            self.table = table
 
     def add(self, data, id=None):
         db = self.load_file()
@@ -68,7 +67,7 @@ class JsthonDb:
             elif id in db[self.table]['data']:
                 raise IdIsAlreadyUsed('id is already used in db (please change the id argument or leave it empty for automatic filling)')
         else:
-            id = self.generate_id()
+            id = str(int(uuid.uuid4()))
         keys = db[self.table]['keys']
         if len(keys) == 0:
             db[self.table]['keys'] = list(data.keys())
@@ -100,7 +99,7 @@ class JsthonDb:
             raise TypeError(f'data key in the db must be "dict" not {type(data)}')
         if id is None:
             for d in data:
-                id = self.generate_id()
+                id = str(int(uuid.uuid4()))
                 db[self.table]['data'][id] = d
                 _return[id] = d
         else:
@@ -237,8 +236,9 @@ class JsthonDb:
     def add_new_keys(self, keys, values=None):
         if not isinstance(keys, list):
             raise TypeError(f'keys field must be list not {type(keys)}')
-        if not isinstance(values, list) or values is None:
-            raise TypeError(f'values field must be one of the (list, None) types {type(values)}')
+        if values is not None:
+            if not isinstance(values, list):
+                raise TypeError(f'values field must be one of the (list, None) types {type(values)}')
         if all(not isinstance(i, str) for i in keys):
             raise TypeError(f'keys in list must bе string types')
         db = self.load_file()
